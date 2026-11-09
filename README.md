@@ -69,12 +69,6 @@ git log --oneline -10 upstream/main
 
 Run `git fetch --no-tags upstream` again to retrieve later changes. Fetching leaves Yodel Studio’s files and deployed app unchanged. Because this repository has a fresh history and a smaller codebase, review and port relevant changes on a branch, then run the tests and build before deploying. A blanket merge would bring back unrelated CHIMERA files and requires reconciling the separate histories.
 
-## Hosting and security
-
-Cloudflare serves the files in `yodel/dist` as Workers Static Assets. The build emits the same response headers used by the local production preview. Its Content Security Policy permits same-origin scripts, worklets and WebAssembly compilation. Responses disable MIME sniffing, referrer transmission and access to the microphone, camera and location. No microphone input is needed to synthesize a voice. [Static build configuration](yodel/vite.config.ts) · [Cloudflare configuration](wrangler.jsonc)
-
-When a visitor opens a remix, the importer limits both the encoded and decompressed payload, accepts up to 256 notes, validates pitch, timing and anatomy ranges, and assigns new editor IDs. Song titles are rendered as text. Songs stay in the browser and share URL; the server does not store compositions. [Importer](yodel/song-links.ts) · [Round-trip and validation tests](tests/yodel-remixes.test.ts)
-
 ## Credits
 
 Built by [Klaus Bravenboer](https://klaus.co.nz/) from [Hack Humanity](https://hackhumanity.com/). Inspired by [CHIMERA](https://github.com/jamesondh/chimera-vocal-synth) by [Jameson Hodge](https://x.com/jamesonhodge).
