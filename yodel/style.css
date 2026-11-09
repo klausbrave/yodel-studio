@@ -22,17 +22,46 @@
   box-sizing: border-box;
 }
 body {
-  --landscape-height: max(480px, 40vw);
   display: flow-root;
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
   margin: 0;
   min-height: 100svh;
-  background:
-    linear-gradient(var(--paper), color-mix(in srgb, var(--paper) 82%, transparent) 36%) center bottom / 100% var(--landscape-height) no-repeat,
-    url("./alpine-meadow.webp") left bottom / auto var(--landscape-height) no-repeat;
+}
+body::before,
+.credits::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background-image: url("./alpine-meadow.webp");
+  background-repeat: no-repeat;
+  opacity: 0.18;
+  pointer-events: none;
+}
+body::before {
+  /* Crop out the meadow so the distant range can sit beside the upper controls. */
+  inset: 0 0 auto;
+  height: 30vw;
+  background-size: 100% auto;
+  mask-image: linear-gradient(transparent, #000 34%, #000 72%, transparent);
+}
+.credits::before {
+  inset: auto calc(50% - 50vw) -12px;
+  height: max(70px, 12vw);
+  background-position: center bottom;
+  background-size: 110% auto;
+  mask-image: linear-gradient(transparent, #000 25%);
+}
+@media (max-width: 630px) {
+  body::before {
+    top: 84px;
+  }
 }
 @media (forced-colors: active), print {
-  body {
-    background: none;
+  body::before,
+  .credits::before {
+    display: none;
   }
 }
 button,
@@ -751,6 +780,7 @@ select,
   background: #e0e4d9;
 }
 .credits {
+  position: relative;
   font-size: 11px;
   color: var(--muted);
 }
