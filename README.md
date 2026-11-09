@@ -8,6 +8,8 @@ Yodel Studio sings in your browser. Press **Play yodel**, grab the tongue or jaw
 
 This project is a focused **fork and expansion of Jameson Hodge’s CHIMERA physical voice model**. Jameson built the simulated vocal tract, glottal source, singing planner and wireframe anatomy. Yodel Studio adds the yodel arrangements, chest-to-falsetto control, live instrument, phrase editor and portable remixes. [Original CHIMERA repository](https://github.com/jamesondh/chimera-vocal-synth) · [Jameson Hodge on X](https://x.com/jamesonhodge)
 
+Here, “fork” describes the source-code lineage. This is currently a standalone repository with a fresh history containing only Yodel Studio, rather than a member of GitHub’s CHIMERA fork network.
+
 ## Play it
 
 - Choose a yodel from the menu. The pitch and speed sliders apply to the whole song.
@@ -57,6 +59,20 @@ The hosted studio preloads my film arrangement of **The Lonely Goatherd**. The s
 
 If you are rebuilding the hosted version and have the local *Goatherd* performance data, place its `performance.json` at `local-scores/goatherd.json` before running `bun run dev` or `bun run build`. The build imports the tempo, duration and timed vocal events. It keeps that input and the generated score out of Git.
 
+## Following CHIMERA improvements
+
+To connect a local checkout to Jameson’s repository, add the upstream remote once, then fetch its branches.
+
+```sh
+git remote add upstream https://github.com/jamesondh/chimera-vocal-synth.git
+git fetch --no-tags upstream
+git log --oneline -10 upstream/main
+```
+
+Run `git fetch --no-tags upstream` again to retrieve later changes. Fetching leaves Yodel Studio’s files and deployed app unchanged. Because this repository has a fresh history and a smaller codebase, review and port relevant changes on a branch, then run the tests and build before deploying. A blanket merge would bring back unrelated CHIMERA files and requires reconciling the separate histories.
+
+The repository is private while I review it. GitHub requires forks of public repositories to be public, so joining the official fork network is a separate publication decision. [GitHub’s fork visibility rules](https://docs.github.com/en/pull-requests/reference/forks#visibility-of-forks)
+
 ## Hosting and security
 
 Cloudflare serves the files in `yodel/dist` as Workers Static Assets. The build emits the same response headers used by the local production preview. Its Content Security Policy permits same-origin scripts, worklets and WebAssembly compilation. Responses disable MIME sniffing, referrer transmission and access to the microphone, camera and location. No microphone input is needed to synthesize a voice. [Static build configuration](yodel/vite.config.ts) · [Cloudflare configuration](wrangler.jsonc)
@@ -65,4 +81,6 @@ When a visitor opens a remix, the importer limits both the encoded and decompres
 
 ## Credits
 
-Built by [Klaus Bravenboer](https://klaus.co.nz/) from [Hack Humanity](https://hackhumanity.com/). Inspired by [CHIMERA](https://github.com/jamesondh/chimera-vocal-synth) by [Jameson Hodge](https://x.com/jamesonhodge). The original MIT notice is preserved in [LICENSE](LICENSE). Archivo is distributed under the [SIL Open Font License](public/fonts/OFL.txt).
+Built by [Klaus Bravenboer](https://klaus.co.nz/) from [Hack Humanity](https://hackhumanity.com/). Inspired by [CHIMERA](https://github.com/jamesondh/chimera-vocal-synth) by [Jameson Hodge](https://x.com/jamesonhodge).
+
+The code is licensed under [MIT](LICENSE). Jameson’s original copyright and permission notice is preserved, with a separate copyright notice for Klaus Bravenboer’s Yodel Studio additions and modifications under the same terms. Archivo is distributed under the [SIL Open Font License](public/fonts/OFL.txt), and Three.js under its MIT license. Every production build includes these notices in `licenses.txt`.

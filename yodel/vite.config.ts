@@ -36,7 +36,7 @@ export default defineConfig({
     {
       name: "yodel-static-files",
       generateBundle() {
-        const notices = ["../public/fonts/OFL.txt", "../node_modules/three/LICENSE"].map((path) =>
+        const notices = ["../LICENSE", "../public/fonts/OFL.txt", "../node_modules/three/LICENSE"].map((path) =>
           readFileSync(new URL(path, import.meta.url), "utf8"),
         );
         this.emitFile({ type: "asset", fileName: "licenses.txt", source: notices.join("\n\n") });
