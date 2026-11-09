@@ -1,6 +1,7 @@
 import { Singer } from "./audio";
 import { Editor } from "./editor";
 import { SongMenu } from "./song-menu";
+import { trackUsage } from "./analytics";
 import { Portrait, drawFolds, PitchTrace } from "./views";
 import {
   clamp,
@@ -118,6 +119,7 @@ const singer = new Singer(
       }
     } else if (message.type === "position") {
       if (!phrase.notes.some((n) => n.id === message.id)) return;
+      if (message.playing && !playing) trackUsage("play");
       cursor = message.id;
       playing = message.playing;
       sounding = message.sounding;

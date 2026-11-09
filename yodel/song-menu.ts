@@ -1,4 +1,5 @@
 import { hasPerformance, publishedName } from "./published";
+import { trackUsage } from "./analytics";
 import { defaultPreset, original, presets, type Phrase, type Preset } from "./score";
 import { maxTitle, readSong, songFragment, songUrl, validSong, validTitle, type Song } from "./song-links";
 
@@ -98,6 +99,7 @@ export class SongMenu {
         if (location.hash !== hash) return false;
         this.shared = { hash, song };
         this.choose(sharedKey);
+        trackUsage("shared_open");
         notice("");
         return true;
       } catch {
@@ -134,6 +136,7 @@ export class SongMenu {
     this.store(key, song);
     this.setAddress("");
     this.choose(key);
+    trackUsage("remix_created");
   }
 
   update(phrase: Phrase) {
@@ -214,6 +217,7 @@ export class SongMenu {
         field.value = url;
         copy.disabled = false;
         status.textContent = "Anyone with this link can play and remix this version.";
+        trackUsage("share_created");
       } catch {
         if (request === generation) status.textContent = "The share link could not be created.";
       }
@@ -222,6 +226,7 @@ export class SongMenu {
       try {
         await navigator.clipboard.writeText(field.value);
         status.textContent = "Link copied.";
+        trackUsage("share_copied");
       } catch {
         field.focus();
         field.select();

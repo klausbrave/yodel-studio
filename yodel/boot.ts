@@ -1,4 +1,5 @@
 import { initChimera } from "../src/wasm/chimera";
+import "./analytics";
 try {
   await initChimera();
   await import("./studio");

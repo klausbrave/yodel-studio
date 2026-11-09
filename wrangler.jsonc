@@ -1,5 +1,16 @@
 {
   "name": "yodel-studio",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-11-08",
-  "assets": { "directory": "./yodel/dist" }
+  "assets": { "directory": "./yodel/dist", "run_worker_first": ["/api/events"] },
+  "vars": { "PUBLIC_ORIGIN": "https://yodel-studio.hackhumanity.workers.dev" },
+  "analytics_engine_datasets": [{ "binding": "USAGE", "dataset": "yodel_studio_usage" }],
+  "ratelimits": [{ "name": "EVENT_LIMITER", "namespace_id": "2026110901", "simple": { "limit": 120, "period": 60 } }],
+  "limits": { "cpu_ms": 10 },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 0.05,
+    "redact_query_string": true,
+    "traces": { "enabled": true, "head_sampling_rate": 0.01 }
+  }
 }

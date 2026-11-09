@@ -27,7 +27,16 @@ async function visitor(width = 1280) {
   const page = await context.newPage();
   page.on("pageerror", e => errors.push(e.message));
   page.on("console", m => { if (m.type() === "error" && m.text().startsWith("CSP")) errors.push(m.text()); });
-  page.on("request", r => { if (r.method() !== "GET" || new URL(r.url()).origin !== new URL(base).origin) errors.push(r.url()); });
+  page.on("request", r => {
+    const url = new URL(r.url()), origin = new URL(base).origin;
+    if (r.method() === "GET" && url.origin === origin) return;
+    if (origin === "https://yodel-studio.hackhumanity.workers.dev") {
+      if (r.method() === "GET" && url.href === "https://static.cloudflareinsights.com/beacon.min.js") return;
+      if (r.method() === "POST" && url.origin === "https://cloudflareinsights.com" && url.pathname === "/cdn-cgi/rum") return;
+      if (r.method() === "POST" && url.origin === origin && url.pathname === "/api/events") return;
+    }
+    errors.push(r.url());
+  });
   return page;
 }
 const currentTitle = (p) => p.locator("#preset option:checked").textContent();

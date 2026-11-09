@@ -8,11 +8,15 @@
     "wasm": "cargo build -p chimera-wasm --release --target wasm32-unknown-unknown && cp target/wasm32-unknown-unknown/release/chimera_wasm.wasm src/wasm/chimera.wasm",
     "prepare:score": "node scripts/prepare-score.mjs",
     "dev": "bun run prepare:score && bun run wasm && vite yodel --config yodel/vite.config.ts --host 127.0.0.1 --port 5344 --strictPort",
-    "typecheck": "bun run prepare:score && tsc --noEmit",
+    "typecheck": "bun run prepare:score && tsc --noEmit && bun run typecheck:worker",
+    "typecheck:worker": "wrangler types worker/worker-env.d.ts && tsc -p tsconfig.worker.json",
     "build": "bun run wasm && bun run typecheck && vite build yodel --config yodel/vite.config.ts",
     "preview": "vite preview yodel --config yodel/vite.config.ts --host 127.0.0.1 --port 5343 --strictPort",
     "test": "bun run prepare:score && cargo test --workspace --locked && bun test tests",
-    "test:browser": "node scripts/check-studio.mjs"
+    "preview:worker": "wrangler dev --ip 127.0.0.1 --port 8787 --local",
+    "deploy": "bun run build && wrangler deploy",
+    "test:browser": "node scripts/check-studio.mjs",
+    "test:analytics": "node scripts/check-analytics.mjs"
   },
   "dependencies": {
     "three": "0.186.1"
@@ -22,6 +26,7 @@
     "@types/three": "0.186.0",
     "playwright-core": "1.64.1",
     "typescript": "7.0.2",
-    "vite": "8.3.6"
+    "vite": "8.3.6",
+    "wrangler": "4.158.0"
   }
 }

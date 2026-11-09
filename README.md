@@ -69,13 +69,21 @@ git log --oneline -10 upstream/main
 
 Run `git fetch --no-tags upstream` again to retrieve later changes. Fetching leaves Yodel Studio’s files and deployed app unchanged. Because this repository has a fresh history and a smaller codebase, review and port relevant changes on a branch, then run the tests and build before deploying. A blanket merge would bring back unrelated CHIMERA files and requires reconciling the separate histories.
 
-The repository is private while I review it. GitHub requires forks of public repositories to be public, so joining the official fork network is a separate publication decision. [GitHub’s fork visibility rules](https://docs.github.com/en/pull-requests/reference/forks#visibility-of-forks)
-
 ## Hosting and security
 
-Cloudflare serves the files in `yodel/dist` as Workers Static Assets. The build emits the same response headers used by the local production preview. Its Content Security Policy permits same-origin scripts, worklets and WebAssembly compilation. Responses disable MIME sniffing, referrer transmission and access to the microphone, camera and location. No microphone input is needed to synthesize a voice. [Static build configuration](yodel/vite.config.ts) · [Cloudflare configuration](wrangler.jsonc)
+Cloudflare serves the files in `yodel/dist` as Workers Static Assets. The build emits the same response headers used by the local production preview. Its Content Security Policy permits same-origin scripts, worklets and WebAssembly compilation, plus Cloudflare's Web Analytics beacon and reporting endpoint. Responses disable MIME sniffing, referrer transmission and access to the microphone, camera and location. No microphone input is needed to synthesize a voice. [Static build configuration](yodel/vite.config.ts) · [Cloudflare configuration](wrangler.jsonc)
 
-When a visitor opens a remix, the importer limits both the encoded and decompressed payload, accepts up to 256 notes, validates pitch, timing and anatomy ranges, and assigns new editor IDs. Song titles are rendered as text. There is no database or per-play API call. [Importer](yodel/song-links.ts) · [Round-trip and validation tests](tests/yodel-remixes.test.ts)
+When a visitor opens a remix, the importer limits both the encoded and decompressed payload, accepts up to 256 notes, validates pitch, timing and anatomy ranges, and assigns new editor IDs. Song titles are rendered as text. Songs stay in the browser and share URL; the server does not store compositions. [Importer](yodel/song-links.ts) · [Round-trip and validation tests](tests/yodel-remixes.test.ts)
+
+### Usage analytics
+
+The hosted studio uses Cloudflare Web Analytics for visits, pageviews, referral sources, countries, devices and page performance. Five application events also go to Workers Analytics Engine: playback starts, remixes created, share links generated, successful link copies and valid shared songs opened. A sixth measurement records time with the page visible, excluding background tabs. Events are batched and sent in the background. Playback never waits for analytics.
+
+Each event has an action count and a flag for its first occurrence in the current page visit. The flag lets us count visits that tried each feature without storing visitor identifiers. These are visits, not distinct people: refreshing the page starts a new visit. Loop iterations and individual notes do not count as playback starts. A link copy indicates a successful clipboard operation, not proof it was posted elsewhere.
+
+No song titles, syllables, audio, mouth settings, share fragments, account IDs or persistent visitor IDs are sent in application events. Cloudflare's Web Analytics does not use cookies. Localhost and forks on other hostnames do not report to this project's account. The collection ID in [the browser module](yodel/analytics.ts) is public; someone hosting a fork should configure their own Web Analytics site and update `PUBLIC_ORIGIN` in `wrangler.jsonc`.
+
+The [event endpoint](worker/index.ts) accepts only the six named measurements, bounds request bodies to 1 KiB, validates integer counts, rejects cross-origin browser submissions and rate-limits requests. Static assets bypass this Worker. Sampled Worker logs and traces aid diagnostics; event queries use Analytics Engine's own sample weights. Reports can undercount when browsers block analytics or close before sending. [Queries and event definitions](docs/analytics.md)
 
 ## Credits
 

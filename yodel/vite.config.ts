@@ -5,9 +5,9 @@ import { fileURLToPath } from "node:url";
 const headers = {
   "Content-Security-Policy": [
     "default-src 'none'",
-    "script-src 'self' 'wasm-unsafe-eval'",
+    "script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com/beacon.min.js",
     "worker-src 'self'",
-    "connect-src 'self'",
+    "connect-src 'self' https://cloudflareinsights.com",
     "style-src 'self'",
     "font-src 'self'",
     "img-src 'self' data:",
