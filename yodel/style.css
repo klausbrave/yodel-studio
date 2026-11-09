@@ -156,11 +156,27 @@ button {
   gap: 6px;
 }
 .mast .preset {
+  position: relative;
   min-width: 0;
 }
+.mast .preset::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 14px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  transform: translateY(-75%) rotate(45deg);
+  pointer-events: none;
+}
 .mast .preset select {
+  appearance: none;
+  display: block;
   height: 34px;
   width: clamp(145px, 16vw, 220px);
+  padding-inline-end: 36px;
   text-overflow: ellipsis;
 }
 .song-action, .dialog-actions button {
