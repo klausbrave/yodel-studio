@@ -23,6 +23,28 @@ import type { HumanArtic } from "../src/wasm/types";
 import type { TelemetryMessage } from "../src/worklet/protocol";
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+const brand = document.querySelector<HTMLAnchorElement>(".brand")!;
+const hat = brand.querySelector<HTMLElement>(".alpine-mark")!;
+const hatMotion = matchMedia("(prefers-reduced-motion: no-preference)");
+const hoverPointer = matchMedia("(hover: hover) and (pointer: fine)");
+function spinHat() {
+  if (!hatMotion.matches || hat.getAnimations().length) return;
+  // Complete one turn even when the pointer leaves, then return to the resting pose.
+  hat.animate([{ transform: "rotate(0deg)" }, { transform: "rotate(360deg)" }], {
+    duration: 700,
+    easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+  });
+}
+brand.addEventListener("pointerenter", (event) => {
+  if (event.pointerType === "mouse" && hoverPointer.matches) spinHat();
+});
+brand.addEventListener("focus", () => {
+  if (brand.matches(":focus-visible")) spinHat();
+});
+hatMotion.addEventListener("change", () => {
+  if (!hatMotion.matches) hat.getAnimations().forEach((animation) => animation.cancel());
+});
+
 const storageKey = "chimera.yodel-studio.v1";
 let initialSong: string = defaultPreset;
 const drafts = {} as Partial<Record<Preset, Phrase>>;
