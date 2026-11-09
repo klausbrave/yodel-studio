@@ -27,7 +27,7 @@ body {
   margin: 0;
   min-height: 100svh;
   background:
-    linear-gradient(var(--paper), color-mix(in srgb, var(--paper) 85%, transparent) 36%) center bottom / 100% var(--landscape-height) no-repeat,
+    linear-gradient(var(--paper), color-mix(in srgb, var(--paper) 82%, transparent) 36%) center bottom / 100% var(--landscape-height) no-repeat,
     url("./alpine-meadow.webp") left bottom / auto var(--landscape-height) no-repeat;
 }
 @media (forced-colors: active), print {
