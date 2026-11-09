@@ -58,6 +58,11 @@ try {
   await creator.goto(base);
   await creator.waitForFunction(() => !document.querySelector("#play").disabled);
   const initialTitle = await currentTitle(creator);
+  assert.ok(!(await creator.locator("#preset option").allTextContents()).includes("Alpine Echo"));
+  await creator.evaluate(() => localStorage.setItem("chimera.yodel-studio.v1",
+    JSON.stringify({ edition: 2, preset: "Alpine Echo", drafts: {} })));
+  await creator.reload();
+  await opened(creator, initialTitle);
   const originalTempo = Number(await creator.locator("#tempo").inputValue());
   const github = creator.getByRole("link", { name: "Yodel Studio on GitHub (opens in a new tab)" });
   assert.equal(await github.getAttribute("href"), "https://github.com/klausbrave/yodel-studio");
@@ -65,7 +70,7 @@ try {
   assert.ok((await github.getAttribute("rel")).includes("noopener"));
   await opened(creator, initialTitle);
   const original = await notes(creator);
-  assert.equal(original.length, initialTitle === "Alpine Echo" ? 35 : 160);
+  assert.equal(original.length, initialTitle === "Yodel-ay refrain" ? 11 : 160);
   await remix(creator, "Alpine Postcard");
   assert.deepEqual(await notes(creator), original);
   await creator.locator("#edit-pitch").selectOption("62");

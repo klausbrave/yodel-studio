@@ -23,4 +23,4 @@ if (score) {
   }) };
 }
 await writeFile(output, JSON.stringify(score) + "\n");
-console.log(score ? "Prepared the local performance score." : "Using the original Alpine Echo demo.");
+console.log(score ? "Prepared the local performance score." : "Using the Yodel-ay refrain demo.");

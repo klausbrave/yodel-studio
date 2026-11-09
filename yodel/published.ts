@@ -1,6 +1,5 @@
 import data from "./performance.generated.json";
 import dictionary from "./pronunciations.json";
-import { alpineEchoName, alpineEchoSong } from "./alpine-echo";
 import type { Note, Phrase } from "./score";
 
 interface PerformanceEvent {
@@ -13,8 +12,8 @@ interface PerformanceEvent {
 }
 const performance = data as { bpm: number; duration: number; events: PerformanceEvent[] } | null;
 export const hasPerformance = performance !== null;
-export const publishedName = hasPerformance ? "The Lonely Goatherd" : alpineEchoName;
-const { bpm, duration, events } = performance ?? { bpm: alpineEchoSong.bpm, duration: 0, events: [] };
+export const publishedName = "The Lonely Goatherd";
+const { bpm, duration, events } = performance ?? { bpm: 144, duration: 0, events: [] };
 
 // This is the editable arrangement used to render Klaus's 45-second X post.
 const wordless: Record<string, string> = { leɪ: "Lay", iː: "Ee", oʊ: "O", dəl: "dl", uː: "Oo" };
@@ -35,4 +34,4 @@ const notes: Note[] = events.map((event, i) => {
     ...(rest ? { rest } : {}),
   };
 });
-export const publishedSong: Phrase = events.length ? { bpm, leadBeats: beats(events[0].start), notes } : alpineEchoSong;
+export const publishedSong: Phrase | null = events.length ? { bpm, leadBeats: beats(events[0].start), notes } : null;

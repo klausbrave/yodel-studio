@@ -1,5 +1,5 @@
 import { hasPerformance, publishedName } from "./published";
-import { original, presets, type Phrase, type Preset } from "./score";
+import { defaultPreset, original, presets, type Phrase, type Preset } from "./score";
 import { maxTitle, readSong, songFragment, songUrl, validSong, validTitle, type Song } from "./song-links";
 
 const remixPrefix = "chimera.yodel-remix.v1.";
@@ -32,7 +32,7 @@ export class SongMenu {
         } catch { /* An unreadable copy does not affect the others. */ }
       }
     } catch { /* A disabled store still allows playing, remixing and sharing. */ }
-    this.localKey = isPreset(initialKey) || this.remixes.has(initialKey) ? initialKey : publishedName;
+    this.localKey = isPreset(initialKey) || this.remixes.has(initialKey) ? initialKey : defaultPreset;
     this.key = this.localKey;
     this.current = this.lookup(this.key);
     for (const name of Object.keys(presets)) el("local-songs").before(new Option(name));
@@ -73,7 +73,7 @@ export class SongMenu {
     el<HTMLSelectElement>("preset").value = this.key;
     el("rename-song").hidden = !this.remixes.has(this.key);
     el("original-performance").hidden = !hasPerformance || this.key !== publishedName;
-    document.title = this.key === publishedName ? "Yodel Studio" : this.current.title + " · Yodel Studio";
+    document.title = this.key === defaultPreset ? "Yodel Studio" : this.current.title + " · Yodel Studio";
   }
 
   private choose(key: string) {
@@ -115,7 +115,7 @@ export class SongMenu {
   reset() {
     for (const key of Object.keys(presets) as Preset[]) delete this.drafts[key];
     this.setAddress("");
-    this.choose(publishedName);
+    this.choose(defaultPreset);
     notice("");
   }
 

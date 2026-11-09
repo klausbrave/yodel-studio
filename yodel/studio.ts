@@ -4,6 +4,7 @@ import { SongMenu } from "./song-menu";
 import { Portrait, drawFolds, PitchTrace } from "./views";
 import {
   clamp,
+  defaultPreset,
   frequency,
   highNote,
   inFalsetto,
@@ -17,14 +18,13 @@ import {
   type Phrase,
   type Preset,
 } from "./score";
-import { publishedName } from "./published";
 import { dragMouth, stepMouth, type MouthPart } from "./mouth";
 import type { HumanArtic } from "../src/wasm/types";
 import type { TelemetryMessage } from "../src/worklet/protocol";
 
 const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const storageKey = "chimera.yodel-studio.v1";
-let initialSong: string = publishedName;
+let initialSong: string = defaultPreset;
 const drafts = {} as Partial<Record<Preset, Phrase>>;
 let loop = true;
 let holdOnDrag = false;
@@ -43,7 +43,7 @@ try {
 const url = new URL(location.href);
 const legacyLink = url.searchParams.has("preset");
 if (legacyLink) {
-  initialSong = publishedName;
+  initialSong = defaultPreset;
   url.searchParams.delete("preset");
   history.replaceState(history.state, "", url);
 }

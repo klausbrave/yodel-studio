@@ -1,14 +1,13 @@
 import { describe, expect, test } from "bun:test";
-import { alpineEchoPronunciations, alpineEchoSong } from "../yodel/alpine-echo";
-import { publishedName } from "../yodel/published";
-import { maxNotes, original, totalBeats, validPhrase, type Phrase } from "../yodel/score";
+import { alpineEchoSong } from "../yodel/alpine-echo";
+import { defaultPreset, maxNotes, original, presets, validPhrase, type Phrase } from "../yodel/score";
 import { readSong, songUrl, validTitle, type Song } from "../yodel/song-links";
 
 const toWire = (song: Song) => JSON.parse(JSON.stringify(song, (key, value) => key === "id" ? undefined : value));
 const address = "https://yodel.example/studio/?preset=old#instrument";
 
 describe("portable yodel scores", () => {
-  for (const preset of new Set([publishedName, "Alpine Echo", "Rolling yodel"])) {
+  for (const preset of new Set([defaultPreset, "Yodel-ay refrain", "Rolling yodel"])) {
     test(preset + " keeps its performance timing and registers", async () => {
       const phrase = original(preset);
       const song = { title: "My alpine duet", baseBpm: phrase.bpm, phrase };
@@ -22,13 +21,11 @@ describe("portable yodel scores", () => {
     });
   }
 
-  test("Alpine Echo is a four-bar staccato loop with low chest notes and falsetto answers", () => {
-    const { notes } = alpineEchoSong;
-    expect(totalBeats(alpineEchoSong)).toBe(16);
-    expect(notes.reduce((sum, note) => sum + note.beats, 0)).toBe(8);
-    expect(notes.every(n => (n.rest ?? 0) > 0 && Object.hasOwn(alpineEchoPronunciations, n.syllable))).toBe(true);
-    expect(notes.filter(n => n.register === "chest").every(n => n.midi >= 40 && n.midi <= 50)).toBe(true);
-    expect(notes.filter(n => n.register === "falsetto").map(n => n.midi)).toEqual([64, 67, 69, 67]);
+  test("existing Alpine Echo shares still play after the preset is removed", async () => {
+    expect(Object.hasOwn(presets, "Alpine Echo")).toBe(false);
+    const song = { title: "My saved remix", baseBpm: alpineEchoSong.bpm, phrase: alpineEchoSong };
+    const restored = await readSong(new URL(await songUrl(song, address)).hash);
+    expect(toWire(restored)).toEqual(toWire(song));
   });
 
   test("a full custom score keeps edits on every note, with independent editor IDs", async () => {

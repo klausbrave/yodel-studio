@@ -1,5 +1,5 @@
 import { publishedName, publishedPronunciations, publishedSong } from "./published";
-import { alpineEchoName, alpineEchoPronunciations, alpineEchoSong } from "./alpine-echo";
+import { alpineEchoPronunciations } from "./alpine-echo";
 import { validMouth, type MouthShape } from "./mouth";
 
 const practiceSounds = { Yo: "joʊ", De: "də", Lay: "leɪ", Hee: "hi", Hoo: "hu", Oh: "o", Ah: "ɑ", Ee: "i", Oo: "u" };
@@ -103,12 +103,12 @@ function wordless(pattern: FilmNote[]): Phrase {
   };
 }
 export const presets: Record<string, Phrase> = {
-  [publishedName]: publishedSong,
-  [alpineEchoName]: alpineEchoSong,
+  ...(publishedSong ? { [publishedName]: publishedSong } : {}),
   "Yodel-ay refrain": wordless(refrain),
   "Sustained octaves": wordless(octave),
   "Rolling yodel": wordless(rolling),
 };
+export const defaultPreset = publishedSong ? publishedName : "Yodel-ay refrain";
 export type Preset = keyof typeof presets;
 export const lowNote = 36,
   highNote = 79,
