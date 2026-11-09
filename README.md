@@ -1,7 +1,5 @@
 # Yodel Studio
 
-**Built in Codex with GPT-6 Astra** · `gpt-6-astra`, max reasoning
-
 Yodel Studio sings in your browser. Press **Play yodel**, grab the tongue or jaw to change a vowel, and pull the vocal folds to bend the pitch. You can turn the whole performance into a song of your own. [Play Yodel Studio](https://yodel-studio.hackhumanity.workers.dev/)
 
 [![Yodel Studio with six draggable points on the singer, the vibrating vocal folds and the phrase editor](docs/yodel-studio.webp)](https://yodel-studio.hackhumanity.workers.dev/)
@@ -29,7 +27,7 @@ I started with a question about *The Lonely Goatherd* from *The Sound of Music*.
 
 ## From film to playable instrument
 
-I built the studio in **Codex with GPT-6 Astra** and iterated with Codex’s built-in browser pointed at localhost. I could play the phrase, miss a handle, hear which syllable was held, and see how far down I had to scroll to edit the next note. That led to six labelled grab targets, an opt-in head rotation control and a compact layout that puts the editor above the fold on a laptop.
+I built the studio in Codex Desktop using Astra 6 with extra high effort and iterated with the built-in browser pointed at localhost. I could play the phrase, miss a handle, hear which syllable was held, and see how far down I had to scroll to edit the next note. That led to six labelled grab targets, an opt-in head rotation control and a compact layout that puts the editor above the fold on a laptop.
 
 The build compiles the Rust engine to WebAssembly. The browser loads the module once and runs a separate instance inside an AudioWorklet. The score schedules articulation on the audio clock. The UI reads pitch and tract geometry back from the simulation to draw the singer. The built app serves static files. Playback, editing, encoding a share link and decoding it all run on the listener’s device. [Audio integration](yodel/audio.ts) · [Live anatomy](yodel/views.ts) · [Song link format](yodel/song-links.ts)
 
