@@ -1,0 +1,13 @@
+node_modules/
+target/
+dist/
+.wrangler/
+.DS_Store
+.env*
+.local/
+local-scores/
+yodel/performance.generated.json
+src/wasm/chimera.wasm
+*.mp4
+*.wav
+*.tele

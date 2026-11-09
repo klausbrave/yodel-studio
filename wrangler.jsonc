@@ -1,0 +1,5 @@
+{
+  "name": "yodel-studio",
+  "compatibility_date": "2026-11-08",
+  "assets": { "directory": "./yodel/dist" }
+}

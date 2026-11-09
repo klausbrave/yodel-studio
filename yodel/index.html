@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f6f4ed" />
+    <meta
+      name="description"
+      content="Play a yodel, shape the singer’s lips, jaw, tongue, palate and throat, and edit your own phrases."
+    />
+    <link rel="icon" href="data:," />
+    <title>Yodel Studio</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="mast">
+      <nav class="wrap mast-inner" aria-label="Studio controls">
+        <h1><a class="brand" href="#instrument"><span class="alpine-mark" aria-hidden="true"></span>Yodel Studio</a></h1>
+        <span class="catalog">Chimera voice instruments</span>
+        <div class="song-tools">
+          <label class="preset">
+            <span class="sr">Choose a yodel</span>
+            <select id="preset">
+              <optgroup id="local-songs" label="Your remixes" hidden></optgroup>
+              <optgroup id="shared-songs" label="Shared with you" hidden></optgroup>
+            </select>
+          </label>
+          <button class="song-action" id="remix-song" aria-haspopup="dialog" title="Make a named copy of this song">Remix</button>
+          <button class="song-action" id="share-song" aria-haspopup="dialog" title="Share a playable link to this version">Share</button>
+        </div>
+        <button class="reset-all" id="reset" title="Restore the controls and preset phrases. Your named remixes stay in the song list.">
+          <span aria-hidden="true">↺</span> Reset all
+        </button>
+        <button class="sound" id="mute" aria-pressed="false" aria-label="Mute audio">
+          <span class="level" aria-hidden="true"><i></i><i></i><i></i><i></i></span
+          ><span id="mute-label">Sound on</span>
+        </button>
+        <a class="repo-link" href="https://github.com/klausbrave/Yodel-Studio" target="_blank"
+          rel="noopener noreferrer" aria-label="Yodel Studio on GitHub (opens in a new tab)" title="Yodel Studio on GitHub">
+          <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.44 7.44 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+          </svg>
+        </a>
+      </nav>
+    </header>
+    <p class="wrap song-status" id="song-status" role="status"></p>
+    <main class="wrap" id="instrument">
+      <section class="console" aria-label="Live yodel instrument">
+        <div class="stage">
+          <section class="singer-panel" aria-label="Interactive singer">
+            <div class="panel-heading">
+              <h2>Throat &amp; tongue</h2>
+              <span class="handle-hint" id="handle-hint">Drag a handle</span>
+              <button id="rotate" class="view-switch" aria-pressed="false"
+                title="Allow dragging the background to rotate the head">Rotate view</button>
+              <button
+                id="zoom"
+                class="view-switch"
+                aria-pressed="true"
+                aria-label="Throat close-up. Switch to full head"
+              >
+                Full head
+              </button>
+            </div>
+            <div class="portrait" id="portrait">
+              <div id="head-image" class="head-image" role="img" aria-label="Live cutaway of the singer’s head"></div>
+              <button
+                id="tongue"
+                class="pin tongue" data-side="left"
+                aria-label="Move the tongue. Drag or use the arrow keys to shape this vowel."
+                title="Drag the tongue to shape the vowel"
+                hidden
+              >
+                <i></i><span>Tongue</span>
+              </button>
+              <div
+                id="throat"
+                class="pin throat" data-side="left"
+                tabindex="0"
+                role="slider"
+                aria-orientation="horizontal"
+                aria-label="Throat opening"
+                aria-valuemin="-1"
+                aria-valuemax="1"
+                aria-valuenow="0"
+                title="Drag sideways to open or narrow the throat"
+                hidden
+              >
+                <i></i><span>Throat ↔</span>
+              </div>
+              <button class="pin velum" id="velum" data-side="left" hidden
+                title="Drag down to lower the soft palate and open the nasal passage"
+                aria-label="Soft palate opening" role="slider" aria-orientation="vertical"
+                aria-valuemin="0" aria-valuemax="1.4" aria-valuenow="0">
+                <i></i><span>Soft palate</span>
+              </button>
+              <button class="pin lips" id="lips" data-side="right" hidden
+                title="Drag down to open the lips, sideways to protrude them. Shift-drag sideways to change their width."
+                aria-label="Lips. Use arrow keys to open or protrude the lips, or Shift and an arrow to change width.">
+                <i></i><span>Lips</span>
+              </button>
+              <button class="pin jaw" id="jaw" data-side="right" hidden
+                title="Drag down to open the jaw" aria-label="Jaw opening" role="slider"
+                aria-orientation="vertical" aria-valuemin="-0.1" aria-valuemax="2.6" aria-valuenow="0">
+                <i></i><span>Jaw</span>
+              </button>
+              <div
+                id="larynx"
+                class="pin larynx" data-side="right"
+                tabindex="0"
+                role="slider"
+                aria-orientation="vertical"
+                aria-label="Vocal fold pitch on singer"
+                aria-valuemin="48"
+                aria-valuemax="79"
+                aria-valuenow="55"
+                hidden
+              >
+                <i></i><span>Vocal folds ↕</span>
+              </div>
+            </div>
+            <div class="tract-footer">
+              <div><span class="micro" id="readout-label">SYLLABLE</span><b id="syllable-readout"></b></div>
+              <div class="trace-block">
+                <span class="micro">PITCH TRACE</span
+                ><canvas id="trace" width="200" height="34" aria-label="Recent measured voice pitch"></canvas>
+              </div>
+            </div>
+          </section>
+          <section class="fold-panel" aria-label="Vocal fold instrument">
+            <div class="panel-heading">
+              <h2>Vocal folds</h2>
+              <span>SLOW MOTION</span>
+            </div>
+            <div
+              id="fold-pad"
+              class="fold-pad"
+              tabindex="0"
+              role="slider"
+              aria-orientation="vertical"
+              aria-label="Vocal fold pitch"
+              aria-describedby="fold-help"
+              aria-valuemin="48"
+              aria-valuemax="79"
+              aria-valuenow="55"
+            >
+              <canvas id="folds" aria-hidden="true"></canvas>
+              <div class="drag-scale" aria-hidden="true"><span>HIGH</span><i></i><span>LOW</span></div>
+            </div>
+            <div class="fold-footer">
+              <div class="pitch-number"><b id="pitch-name">G3</b><span id="pitch-hz">196 Hz</span></div>
+              <span class="register" id="register">Chest voice</span>
+            </div>
+            <p class="fold-help" id="fold-help">
+              <span aria-hidden="true">↕</span> Drag the folds up or down to change pitch.
+            </p>
+          </section>
+        </div>
+        <div class="transport">
+          <button id="play" class="play" disabled>
+            <i class="play-icon" aria-hidden="true"></i><span>Loading voice…</span>
+          </button>
+          <div class="modes">
+            <button id="hold" class="mode" aria-pressed="false" disabled>
+              <span class="hold-icon" aria-hidden="true">⌁</span>Hold note
+            </button>
+            <button id="loop" class="mode" aria-pressed="true"><span aria-hidden="true">⟳</span>Loop</button>
+            <button id="hold-on-drag" class="mode" aria-pressed="false"
+              title="Hold the current syllable while dragging. When off, the song keeps playing.">
+              Hold on drag
+            </button>
+          </div>
+          <div class="voice-sliders">
+            <label class="live-slider" for="transpose"
+              ><span>Pitch</span><output for="transpose" id="shift">Original</output
+              ><input id="transpose" type="range" min="-12" max="12" step="1" value="0"
+            /></label>
+            <label class="live-slider" for="tempo"
+              ><span>Speed</span><output id="bpm" for="tempo">1×</output
+              ><input id="tempo" type="range" min="60" max="288" value="144"
+            /></label>
+          </div>
+        </div>
+      </section>
+      <p id="error" role="alert" hidden></p>
+      <section id="editor" class="editor" aria-labelledby="editor-title">
+        <div class="editor-title-row">
+          <h2 id="editor-title">Phrase editor</h2>
+          <span id="phrase-info"></span>
+          <p id="edit-help">Drag notes up or down for pitch, sideways to reorder.</p>
+          <button id="rename-song" class="rename-song" aria-haspopup="dialog" hidden>Rename song</button>
+          <a
+            id="original-performance"
+            href="https://x.com/klausbrave/status/2119372853502177323"
+            title="The Lonely Goatherd · Music by Richard Rodgers, lyrics by Oscar Hammerstein II"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Original performance ↗</a
+          >
+        </div>
+        <div class="score-shell">
+          <div class="pitch-axis" aria-hidden="true">
+            <span id="axis-high"></span><span id="axis-mid"></span><span id="axis-low"></span>
+          </div>
+          <div class="score-scroll"><div id="score" class="score" role="group" aria-label="Phrase notes"></div></div>
+        </div>
+        <div class="edit-controls">
+          <span id="selected" class="selected-note">Note 01</span>
+          <label
+            ><span id="syllable-label">Syllable</span>
+            <select id="syllable"></select
+          ></label>
+          <label
+            ><span id="note-pitch-label">Pitch</span>
+            <select id="edit-pitch"></select
+          ></label>
+          <label>Beats <input type="number" min=".125" max="12" step="any" id="beats" /></label>
+          <div class="edit-actions">
+            <button id="left" title="Move note earlier" aria-label="Move note earlier">←</button
+            ><button id="right" title="Move note later" aria-label="Move note later">→</button>
+            <button id="duplicate">Duplicate</button><button id="remove">Remove</button>
+          </div>
+        </div>
+        <span id="reset-status" role="status"></span>
+      </section>
+      <footer class="credits">
+        <span
+          >Built by <a href="https://klaus.co.nz" target="_blank" rel="noopener noreferrer">Klaus Bravenboer</a> from
+          <a href="https://hackhumanity.com" target="_blank" rel="noopener noreferrer">Hack Humanity</a>.</span
+        >
+        <span>
+          Inspired by <a href="https://github.com/jamesondh/chimera-vocal-synth" target="_blank" rel="noopener noreferrer">CHIMERA physical voice model</a>
+          · <a href="https://x.com/jamesonhodge" target="_blank" rel="noopener noreferrer">Jameson Hodge</a>
+        </span>
+      </footer>
+    </main>
+    <dialog class="song-dialog" id="name-dialog" aria-labelledby="name-heading">
+      <form id="name-form">
+        <h2 id="name-heading">Remix song</h2>
+        <label for="song-name">Song name</label>
+        <input id="song-name" type="text" maxlength="80" required autocomplete="off" autofocus />
+        <div class="dialog-actions">
+          <button id="name-cancel" type="button">Cancel</button>
+          <button id="name-submit" type="submit" class="primary-action">Create remix</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog class="song-dialog" id="share-dialog" aria-labelledby="share-heading">
+      <h2 id="share-heading">Share song</h2>
+      <label for="song-link">Song link</label>
+      <input id="song-link" type="text" readonly spellcheck="false" />
+      <p id="share-status" role="status"></p>
+      <div class="dialog-actions">
+        <button id="share-close" type="button">Done</button>
+        <button id="copy-link" type="button" class="primary-action" disabled>Copy link</button>
+      </div>
+    </dialog>
+    <script type="module" src="./boot.ts"></script>
+  </body>
+</html>
