@@ -60,7 +60,7 @@ try {
   const initialTitle = await currentTitle(creator);
   const originalTempo = Number(await creator.locator("#tempo").inputValue());
   const github = creator.getByRole("link", { name: "Yodel Studio on GitHub (opens in a new tab)" });
-  assert.equal(await github.getAttribute("href"), "https://github.com/klausbrave/Yodel-Studio");
+  assert.equal(await github.getAttribute("href"), "https://github.com/klausbrave/yodel-studio");
   assert.equal(await github.getAttribute("target"), "_blank");
   assert.ok((await github.getAttribute("rel")).includes("noopener"));
   await opened(creator, initialTitle);

@@ -4,13 +4,13 @@
 
 Yodel Studio sings in your browser. Press **Play yodel**, grab the tongue or jaw to change a vowel, and pull the vocal folds to bend the pitch. You can turn the whole performance into a song of your own. [Play Yodel Studio](https://yodel-studio.hackhumanity.workers.dev/)
 
-[![Yodel Studio playing Alpine Echo, with six draggable points on the singer, the vibrating vocal folds and the phrase editor](docs/yodel-studio.webp)](https://yodel-studio.hackhumanity.workers.dev/)
+[![Yodel Studio with six draggable points on the singer, the vibrating vocal folds and the phrase editor](docs/yodel-studio.webp)](https://yodel-studio.hackhumanity.workers.dev/)
 
 This project is a focused **fork and expansion of Jameson Hodge’s CHIMERA physical voice model**. Jameson built the simulated vocal tract, glottal source, singing planner and wireframe anatomy. Yodel Studio adds the yodel arrangements, chest-to-falsetto control, live instrument, phrase editor and portable remixes. [Original CHIMERA repository](https://github.com/jamesondh/chimera-vocal-synth) · [Jameson Hodge on X](https://x.com/jamesonhodge)
 
 ## Play it
 
-- Choose **Alpine Echo** for an original four-bar beatbox yodel. Its 35 syllables alternate clipped bass hits with two falsetto answers at 112 BPM. The pitch and speed sliders apply to the whole song.
+- Choose a yodel from the menu. The pitch and speed sliders apply to the whole song.
 - Drag the **lips, jaw, soft palate, tongue, throat or vocal folds** while the music plays. Turn on **Hold on drag** to linger on a syllable. Turn on **Rotate view** when you want to turn the head.
 - Select a note in the **Phrase editor** to change its syllable, pitch or duration. Drag vertically to repitch it, sideways to reorder it, or duplicate it to repeat it. **Reset all** restores the controls and preset phrases. Named remixes stay in your song list.
 - **Remix** makes a full copy you can name and edit. **Share** gives you a playable snapshot. Anyone can open it and make the next remix. The notes and mouth settings travel in the URL fragment, and named drafts save in the current browser.
@@ -53,9 +53,9 @@ With the production preview running and Google Chrome installed, use a second te
 
 ### Original scores and the hosted arrangement
 
-A clean checkout opens with **Alpine Echo** and three wordless practice presets. The hosted studio also preloads my film arrangement of **The Lonely Goatherd**. The song is by Richard Rodgers and Oscar Hammerstein II. The MIT license covers the code. The original music, lyrics, score and film recording retain their respective copyrights.
+The hosted studio preloads my film arrangement of **The Lonely Goatherd**. The song is by Richard Rodgers and Oscar Hammerstein II. The MIT license covers the code. The original music, lyrics, score and film recording retain their respective copyrights.
 
-If you are rebuilding the hosted version and have the local *Goatherd* performance data, place its `performance.json` at `local-scores/goatherd.json` before running `bun run dev` or `bun run build`. The build imports the tempo, duration and timed vocal events. It keeps that input and the generated score out of Git. To write a new original preset, start with the editable Alpine Echo score. [Alpine Echo composition](yodel/alpine-echo.ts)
+If you are rebuilding the hosted version and have the local *Goatherd* performance data, place its `performance.json` at `local-scores/goatherd.json` before running `bun run dev` or `bun run build`. The build imports the tempo, duration and timed vocal events. It keeps that input and the generated score out of Git.
 
 ## Hosting and security
 
